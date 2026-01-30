@@ -245,26 +245,50 @@ function isActive(href: string): boolean {
 
     .nav-links {
       position: fixed;
-      top: 0;
+      top: 60px;
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(10px);
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
+      padding-top: var(--space-xl);
       gap: 0;
       opacity: 0;
       visibility: hidden;
-      transition: opacity var(--transition-base), visibility var(--transition-base);
       z-index: 200;
-      padding: var(--space-2xl);
+      transition: opacity 0.3s ease, visibility 0.3s ease;
     }
 
     .nav-links.open {
       opacity: 1;
       visibility: visible;
+    }
+
+    /* Ladder animation for each menu item */
+    .nav-links li {
+      transform: translateY(-20px);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .nav-links.open li {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .nav-links.open li:nth-child(1) {
+      transition-delay: 0.05s;
+    }
+
+    .nav-links.open li:nth-child(2) {
+      transition-delay: 0.1s;
+    }
+
+    .nav-links.open li:nth-child(3) {
+      transition-delay: 0.15s;
     }
 
     /* Menu card */
