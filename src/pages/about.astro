@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+---
+
+<BaseLayout
+  title="About"
+  description="Learn more about me and this blog."
+>
+  <div class="container container--narrow">
+    <article class="about">
+      <header class="about-header">
+        <p class="about-tagline text-mono">About</p>
+        <h1 class="about-title">Hello, I'm <span class="text-accent">[Your Name]</span></h1>
+      </header>
+
+      <div class="about-content prose">
+        <p class="lead">
+          Welcome to my corner of the internet where I share thoughts, discoveries,
+          and reflections across a wide range of topics.
+        </p>
+
+        <h2>What I Write About</h2>
+        <p>
+          This blog covers my diverse interests:
+        </p>
+        <ul>
+          <li><strong>Robotics</strong> - Exploring automation, AI, and the future of human-machine interaction</li>
+          <li><strong>Spirituality</strong> - Reflections on meaning, mindfulness, and inner growth</li>
+          <li><strong>Nature</strong> - Observations from the natural world and outdoor adventures</li>
+          <li><strong>Technology</strong> - Thoughts on software, tools, and digital life</li>
+          <li><strong>Cooking</strong> - Recipes, techniques, and culinary experiments</li>
+          <li><strong>Books</strong> - Reviews, recommendations, and reading notes</li>
+          <li><strong>Mindset</strong> - Ideas on productivity, learning, and personal development</li>
+          <li><strong>Everyday Life</strong> - Stories and observations from daily experiences</li>
+        </ul>
+
+        <h2>Why This Blog?</h2>
+        <p>
+          I believe in the power of writing to clarify thoughts, share knowledge,
+          and connect with others. This space serves as both a public notebook
+          and a way to give back to the community.
+        </p>
+
+        <h2>Get in Touch</h2>
+        <p>
+          I'd love to hear from you! Whether you have questions, feedback, or just
+          want to say hello, feel free to reach out.
+        </p>
+      </div>
+
+      <footer class="about-footer">
+        <Button href="/blog" variant="primary">
+          Read the Blog
+        </Button>
+        <Button href="mailto:hello@example.com" variant="secondary">
+          Contact Me
+        </Button>
+      </footer>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .about {
+    padding: var(--space-xl) 0;
+  }
+
+  .about-header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .about-tagline {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-sm);
+  }
+
+  .about-title {
+    font-size: 2.5rem;
+    margin-bottom: 0;
+  }
+
+  .about-content {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .about-footer {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--color-grid);
+  }
+
+  @media (max-width: 768px) {
+    .about-title {
+      font-size: 1.75rem;
+    }
+  }
+</style>

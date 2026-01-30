@@ -1,0 +1,45 @@
+---
+interface Props {
+  category: string;
+  linked?: boolean;
+}
+
+const { category, linked = true } = Astro.props;
+
+const categoryDisplay = category
+  .split('-')
+  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(' ');
+---
+
+{linked ? (
+  <a href={`/category/${category}`} class="category-badge">
+    {categoryDisplay}
+  </a>
+) : (
+  <span class="category-badge">
+    {categoryDisplay}
+  </span>
+)}
+
+<style>
+  .category-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: var(--space-xs) var(--space-sm);
+    background: rgba(249, 115, 22, 0.1);
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: background var(--transition-fast), color var(--transition-fast);
+  }
+
+  a.category-badge:hover {
+    background: var(--color-accent);
+    color: var(--color-background);
+  }
+</style>

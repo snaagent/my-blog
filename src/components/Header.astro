@@ -1,0 +1,209 @@
+---
+const pathname = Astro.url.pathname;
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/about', label: 'About' },
+];
+
+function isActive(href: string): boolean {
+  if (href === '/') {
+    return pathname === '/';
+  }
+  return pathname.startsWith(href);
+}
+---
+
+<header class="header">
+  <nav class="nav container">
+    <a href="/" class="logo">
+      <span class="logo-text">My<span class="text-accent">Blog</span></span>
+    </a>
+
+    <button class="mobile-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span class="hamburger"></span>
+    </button>
+
+    <ul class="nav-links">
+      {navLinks.map(link => (
+        <li>
+          <a
+            href={link.href}
+            class:list={['nav-link', { active: isActive(link.href) }]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+  <div class="header-line"></div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(11, 18, 33, 0.95);
+    backdrop-filter: blur(8px);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--space-md);
+    padding-bottom: var(--space-md);
+  }
+
+  .logo {
+    text-decoration: none;
+  }
+
+  .logo-text {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: var(--space-xl);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav-link {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text);
+    text-decoration: none;
+    padding: var(--space-sm) 0;
+    position: relative;
+    transition: color var(--transition-fast);
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-accent);
+    transition: width var(--transition-base);
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--color-accent);
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    width: 100%;
+  }
+
+  .header-line {
+    height: 1px;
+    background: var(--color-accent);
+    opacity: 0.8;
+  }
+
+  .mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-sm);
+  }
+
+  .hamburger {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--color-text);
+    position: relative;
+    transition: background var(--transition-fast);
+  }
+
+  .hamburger::before,
+  .hamburger::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    background: var(--color-text);
+    left: 0;
+    transition: transform var(--transition-base);
+  }
+
+  .hamburger::before {
+    top: -8px;
+  }
+
+  .hamburger::after {
+    bottom: -8px;
+  }
+
+  @media (max-width: 768px) {
+    .mobile-toggle {
+      display: block;
+      z-index: 101;
+    }
+
+    .nav-links {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--color-background);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xl);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--transition-base), visibility var(--transition-base);
+    }
+
+    .nav-links.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .nav-link {
+      font-size: 1.25rem;
+    }
+
+    .mobile-toggle[aria-expanded="true"] .hamburger {
+      background: transparent;
+    }
+
+    .mobile-toggle[aria-expanded="true"] .hamburger::before {
+      transform: rotate(45deg) translate(5px, 6px);
+    }
+
+    .mobile-toggle[aria-expanded="true"] .hamburger::after {
+      transform: rotate(-45deg) translate(5px, -6px);
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector('.mobile-toggle');
+  const navLinks = document.querySelector('.nav-links');
+
+  toggle?.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!expanded));
+    navLinks?.classList.toggle('open');
+  });
+</script>

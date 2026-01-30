@@ -1,0 +1,214 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import CategoryBadge from '../components/CategoryBadge.astro';
+import Button from '../components/Button.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  category: string;
+  heroImage?: string;
+  videoUrl?: string;
+  tags?: string[];
+}
+
+const { title, description, pubDate, category, heroImage, videoUrl, tags } = Astro.props;
+
+const formattedDate = pubDate.toLocaleDateString('en-US', {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+// Extract video embed URL
+function getEmbedUrl(url: string): string | null {
+  if (!url) return null;
+
+  // YouTube
+  const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+  if (ytMatch) {
+    return `https://www.youtube-nocookie.com/embed/${ytMatch[1]}`;
+  }
+
+  // Vimeo
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeoMatch) {
+    return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+  }
+
+  return null;
+}
+
+const embedUrl = videoUrl ? getEmbedUrl(videoUrl) : null;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={heroImage}
+  type="article"
+  publishedTime={pubDate}
+>
+  <article class="blog-post container container--narrow">
+    <header class="post-header">
+      <div class="post-meta">
+        <CategoryBadge category={category} />
+        <time class="date" datetime={pubDate.toISOString()}>{formattedDate}</time>
+      </div>
+      <h1 class="post-title">{title}</h1>
+      <p class="post-description lead">{description}</p>
+    </header>
+
+    {heroImage && (
+      <figure class="hero-image">
+        <img src={heroImage} alt="" />
+      </figure>
+    )}
+
+    {embedUrl && (
+      <div class="video-embed">
+        <iframe
+          src={embedUrl}
+          title={title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    )}
+
+    <div class="post-content prose">
+      <slot />
+    </div>
+
+    {tags && tags.length > 0 && (
+      <footer class="post-footer">
+        <div class="tags">
+          <span class="tags-label">Tags:</span>
+          {tags.map(tag => (
+            <span class="tag">#{tag}</span>
+          ))}
+        </div>
+      </footer>
+    )}
+
+    <nav class="post-nav">
+      <Button href="/blog" variant="secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Blog
+      </Button>
+    </nav>
+  </article>
+</BaseLayout>
+
+<style>
+  .blog-post {
+    padding-top: var(--space-xl);
+  }
+
+  .post-header {
+    margin-bottom: var(--space-2xl);
+    text-align: center;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .date {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-accent);
+  }
+
+  .post-title {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .post-description {
+    color: rgba(241, 245, 249, 0.8);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .hero-image {
+    margin: 0 0 var(--space-2xl);
+  }
+
+  .hero-image img {
+    width: 100%;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-grid);
+  }
+
+  .video-embed {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    margin-bottom: var(--space-2xl);
+    background: var(--color-grid);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .video-embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .post-content {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .post-footer {
+    padding: var(--space-lg) 0;
+    border-top: 1px solid var(--color-grid);
+    margin-bottom: var(--space-xl);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .tags-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(241, 245, 249, 0.6);
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-accent);
+    background: rgba(249, 115, 22, 0.1);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .post-nav {
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-grid);
+  }
+
+  @media (max-width: 768px) {
+    .post-title {
+      font-size: 1.75rem;
+    }
+  }
+</style>

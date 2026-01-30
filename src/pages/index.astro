@@ -1,0 +1,203 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import Button from '../components/Button.astro';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+
+// Sort by date, newest first
+const sortedPosts = allPosts.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const featuredPosts = sortedPosts.filter(post => post.data.featured).slice(0, 3);
+const recentPosts = sortedPosts.filter(post => !post.data.featured).slice(0, 6);
+---
+
+<BaseLayout
+  title="Home"
+  description="A personal blog about robotics, spirituality, nature, technology, cooking, books, mindset, and everyday life."
+>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <p class="hero-tagline text-mono">Welcome to</p>
+        <h1 class="hero-title">
+          My<span class="text-accent">Blog</span>
+        </h1>
+        <p class="hero-description lead">
+          Exploring the intersection of technology and humanity through thoughts on
+          robotics, spirituality, nature, and everyday discoveries.
+        </p>
+        <div class="hero-actions">
+          <Button href="/blog" variant="primary" size="lg">
+            Explore Posts
+          </Button>
+          <Button href="/about" variant="secondary" size="lg">
+            About Me
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Posts -->
+  {featuredPosts.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <header class="section-header">
+          <h2 class="section-title">Featured</h2>
+          <div class="section-line"></div>
+        </header>
+        <div class="posts-grid posts-grid--featured">
+          {featuredPosts.map(post => (
+            <PostCard
+              title={post.data.title}
+              description={post.data.description}
+              pubDate={post.data.pubDate}
+              category={post.data.category}
+              slug={post.id}
+              heroImage={post.data.heroImage?.src}
+              featured={true}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Recent Posts -->
+  <section class="section">
+    <div class="container">
+      <header class="section-header">
+        <h2 class="section-title">Recent Posts</h2>
+        <div class="section-line"></div>
+      </header>
+      {recentPosts.length > 0 ? (
+        <div class="posts-grid">
+          {recentPosts.map(post => (
+            <PostCard
+              title={post.data.title}
+              description={post.data.description}
+              pubDate={post.data.pubDate}
+              category={post.data.category}
+              slug={post.id}
+              heroImage={post.data.heroImage?.src}
+            />
+          ))}
+        </div>
+      ) : (
+        <p class="empty-state">No posts yet. Check back soon!</p>
+      )}
+      {sortedPosts.length > 6 && (
+        <div class="section-footer">
+          <Button href="/blog" variant="secondary">
+            View All Posts
+          </Button>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: var(--space-3xl) 0;
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .hero-tagline {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-sm);
+  }
+
+  .hero-title {
+    font-size: 4rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero-description {
+    color: rgba(241, 245, 249, 0.8);
+    margin-bottom: var(--space-xl);
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .section {
+    padding: var(--space-2xl) 0;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+  }
+
+  .section-title {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--color-grid);
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-lg);
+  }
+
+  .posts-grid--featured {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+
+  .section-footer {
+    margin-top: var(--space-xl);
+    text-align: center;
+  }
+
+  .empty-state {
+    text-align: center;
+    color: rgba(241, 245, 249, 0.6);
+    font-family: var(--font-mono);
+    padding: var(--space-2xl);
+    border: 1px dashed var(--color-grid);
+  }
+
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2.5rem;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
