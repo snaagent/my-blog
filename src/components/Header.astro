@@ -259,6 +259,7 @@ function isActive(href: string): boolean {
       visibility: hidden;
       transition: opacity var(--transition-base), visibility var(--transition-base);
       z-index: 150;
+      padding: var(--space-2xl);
     }
 
     .nav-links.open {
@@ -266,38 +267,61 @@ function isActive(href: string): boolean {
       visibility: visible;
     }
 
+    /* Menu card container using flexbox */
     .nav-links li {
-      background: rgba(11, 18, 33, 0.95);
-      border-left: 1px solid rgba(249, 115, 22, 0.3);
-      border-right: 1px solid rgba(249, 115, 22, 0.3);
+      background: rgba(11, 18, 33, 0.98);
       padding: 0;
+      margin: 0;
       text-align: center;
-      width: 260px;
+      width: 280px;
+      border-left: 1px solid rgba(249, 115, 22, 0.4);
+      border-right: 1px solid rgba(249, 115, 22, 0.4);
+      position: relative;
+    }
+
+    /* Divider line between items */
+    .nav-links li + li::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: var(--space-lg);
+      right: var(--space-lg);
+      height: 1px;
+      background: rgba(249, 115, 22, 0.2);
     }
 
     .nav-links li:first-child {
       border-top: 1px solid var(--color-accent);
-      border-top-left-radius: var(--radius-lg);
-      border-top-right-radius: var(--radius-lg);
-      padding-top: var(--space-sm);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
     }
 
     .nav-links li:last-child {
       border-bottom: 1px solid var(--color-accent);
-      border-bottom-left-radius: var(--radius-lg);
-      border-bottom-right-radius: var(--radius-lg);
-      padding-bottom: var(--space-sm);
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
     }
 
     .nav-link {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       display: block;
       padding: var(--space-lg) var(--space-xl);
+      transition: background var(--transition-fast);
+    }
+
+    .nav-links li:first-child .nav-link {
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+
+    .nav-links li:last-child .nav-link {
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
     }
 
     .nav-link:hover,
     .nav-link.active {
-      background: rgba(249, 115, 22, 0.1);
+      background: rgba(249, 115, 22, 0.15);
     }
 
     .mobile-toggle[aria-expanded="true"] .hamburger {
