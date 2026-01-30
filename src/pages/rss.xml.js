@@ -10,7 +10,7 @@ export async function GET(context) {
 
   return rss({
     title: 'Deep Dive',
-    description: 'A personal blog about robotics, spirituality, nature, technology, cooking, books, mindset, and everyday life.',
+    description: 'Where curiosity sinks deeper — exploring wonder in technology, nature, spirit, and the quiet moments in between.',
     site: context.site,
     items: sortedPosts.map(post => ({
       title: post.data.title,
