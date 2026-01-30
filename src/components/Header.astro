@@ -375,11 +375,13 @@ function isActive(href: string): boolean {
   function closeMenu() {
     toggle?.setAttribute('aria-expanded', 'false');
     navLinks?.classList.remove('open');
+    document.body.classList.remove('menu-open');
   }
 
   function openMenu() {
     toggle?.setAttribute('aria-expanded', 'true');
     navLinks?.classList.add('open');
+    document.body.classList.add('menu-open');
   }
 
   toggle?.addEventListener('click', () => {
