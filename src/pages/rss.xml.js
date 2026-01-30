@@ -9,7 +9,7 @@ export async function GET(context) {
   );
 
   return rss({
-    title: 'SeonNa',
+    title: 'Deep Dive',
     description: 'A personal blog about robotics, spirituality, nature, technology, cooking, books, mindset, and everyday life.',
     site: context.site,
     items: sortedPosts.map(post => ({
