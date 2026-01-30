@@ -240,7 +240,7 @@ function isActive(href: string): boolean {
       top: 50%;
       transform: translateY(-50%);
       margin-left: 0;
-      z-index: 200;
+      z-index: 100;
     }
 
     .nav-links {
@@ -249,8 +249,8 @@ function isActive(href: string): boolean {
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -258,7 +258,7 @@ function isActive(href: string): boolean {
       opacity: 0;
       visibility: hidden;
       transition: opacity var(--transition-base), visibility var(--transition-base);
-      z-index: 150;
+      z-index: 200;
       padding: var(--space-2xl);
     }
 
