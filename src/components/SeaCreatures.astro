@@ -673,7 +673,7 @@
     requestAnimationFrame(animate);
   }
 
-  // Charging particle class for hold effect
+  // Charging particle class for hold effect - energy gathering from sea
   class ChargingParticle {
     constructor(x, y, targetX, targetY) {
       this.x = x;
@@ -681,17 +681,23 @@
       this.targetX = targetX;
       this.targetY = targetY;
       this.life = 1;
+      this.size = 3 + Math.random() * 4;
+      this.speed = 0.03 + Math.random() * 0.04; // Variable speed for organic feel
+      // Random color between cyan and gold (sea energy colors)
+      const hue = 180 + Math.random() * 40; // Cyan to teal
+      this.color = `hsl(${hue}, 80%, 60%)`;
       this.element = document.createElement('div');
       this.element.style.cssText = `
         position: absolute;
         left: ${x}px;
         top: ${y}px;
-        width: 6px;
-        height: 6px;
-        background: #FFD700;
+        width: ${this.size}px;
+        height: ${this.size}px;
+        background: ${this.color};
         border-radius: 50%;
-        box-shadow: 0 0 8px 2px #FFD700, 0 0 15px 4px rgba(255,215,0,0.6);
+        box-shadow: 0 0 ${this.size * 2}px ${this.size}px ${this.color};
         pointer-events: none;
+        opacity: 0.8;
       `;
       foodContainer.appendChild(this.element);
     }
@@ -699,9 +705,20 @@
     update(targetX, targetY) {
       this.targetX = targetX;
       this.targetY = targetY;
-      // Move towards target
-      this.x += (this.targetX - this.x) * 0.15;
-      this.y += (this.targetY - this.y) * 0.15;
+      // Move towards target with easing
+      this.x += (this.targetX - this.x) * this.speed;
+      this.y += (this.targetY - this.y) * this.speed;
+
+      // Speed up as it gets closer
+      const dist = Math.hypot(this.x - this.targetX, this.y - this.targetY);
+      if (dist < 50) {
+        this.speed = Math.min(this.speed * 1.05, 0.25);
+      }
+
+      // Shrink as it approaches center
+      const scale = Math.min(1, dist / 50);
+      this.element.style.transform = `scale(${0.3 + scale * 0.7})`;
+
       this.element.style.left = this.x + 'px';
       this.element.style.top = this.y + 'px';
       return true;
@@ -770,6 +787,7 @@
   let explosionParticles = [];
   let isCharged = false;
   let chargeAnimationId = null;
+  let lastSpawnTime = 0;
 
   function isInteractiveElement(e) {
     const clickedElement = e.target;
@@ -794,24 +812,37 @@
     const elapsed = Date.now() - holdStartTime;
     const targetX = holdX;
     const targetY = holdY + window.scrollY;
+    const now = Date.now();
 
-    // After 3 seconds, start charging effect
-    if (elapsed >= 3000 && !isCharged) {
-      isCharged = true;
-      // Create charging particles around cursor
-      for (let i = 0; i < 12; i++) {
-        const angle = (i / 12) * Math.PI * 2;
-        const dist = 60 + Math.random() * 30;
+    // Spawn new particles continuously while holding (gathering energy from sea)
+    if (now - lastSpawnTime > 100) { // Every 100ms
+      lastSpawnTime = now;
+      // Spawn 2-3 particles from random directions (far away)
+      const spawnCount = 2 + Math.floor(Math.random() * 2);
+      for (let i = 0; i < spawnCount; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 120 + Math.random() * 80; // Start from far (120-200px)
         const px = targetX + Math.cos(angle) * dist;
         const py = targetY + Math.sin(angle) * dist;
         chargingParticles.push(new ChargingParticle(px, py, targetX, targetY));
       }
     }
 
-    // Update charging particles
-    if (isCharged) {
-      for (const p of chargingParticles) {
-        p.update(targetX, targetY);
+    // Mark as charged after 3 seconds
+    if (elapsed >= 3000 && !isCharged) {
+      isCharged = true;
+    }
+
+    // Update all charging particles - remove ones that reached center
+    for (let i = chargingParticles.length - 1; i >= 0; i--) {
+      const p = chargingParticles[i];
+      p.update(targetX, targetY);
+
+      // Check if particle reached center
+      const dist = Math.hypot(p.x - targetX, p.y - targetY);
+      if (dist < 5) {
+        p.remove();
+        chargingParticles.splice(i, 1);
       }
     }
 
