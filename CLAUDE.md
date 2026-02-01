@@ -7,14 +7,8 @@ Personal blog at **https://deep-dive.today** built with Astro, featuring an unde
 ```
 src/
 ├── content/blog/          # Markdown posts by category
-│   ├── robotics/
-│   ├── spirituality/
-│   ├── nature/
-│   ├── technology/
-│   ├── cooking/
-│   ├── books/
-│   ├── mindset/
-│   └── everyday-life/
+│   ├── logbook/           # Journals, essays, reflections
+│   └── shipyard/          # Projects, software, tutorials
 ├── components/
 │   ├── SeaCreatures.astro # Interactive fish, bioluminescent orb, feeding effects
 │   ├── Header.astro       # Navigation with fish feed toggle
@@ -88,7 +82,8 @@ Posts go in `src/content/blog/{category}/filename.md`:
 title: "Post Title"
 description: "Brief description (max 160 chars)"
 pubDate: 2024-01-15
-category: technology
+category: logbook
+type: journal              # For logbook: "journal" or "essay"
 heroImage: ./image.jpg      # optional
 tags: ["tag1", "tag2"]      # optional
 featured: false             # show on homepage
@@ -100,14 +95,13 @@ Post content in Markdown...
 
 ## Categories
 
-- `robotics` - Robotics and automation
-- `spirituality` - Spiritual exploration
-- `nature` - Natural world
-- `technology` - Tech and programming
-- `cooking` - Food and recipes
-- `books` - Book reviews and notes
-- `mindset` - Personal growth
-- `everyday-life` - Daily experiences
+- `logbook` - Written reflections (journals, essays, thoughts)
+- `shipyard` - Building things (projects, software, tutorials)
+
+### Logbook Types
+
+- `journal` - Personal reflections, daily thoughts, stream of consciousness
+- `essay` - Polished, structured explorations of ideas
 
 ## Deployment
 

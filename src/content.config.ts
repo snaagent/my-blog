@@ -1,16 +1,9 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-const categories = [
-  'robotics',
-  'spirituality',
-  'nature',
-  'technology',
-  'cooking',
-  'books',
-  'mindset',
-  'everyday-life'
-] as const;
+const categories = ['logbook', 'shipyard'] as const;
+
+const logbookTypes = ['journal', 'essay'] as const;
 
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
@@ -19,6 +12,7 @@ const blog = defineCollection({
     description: z.string().max(160),
     pubDate: z.coerce.date(),
     category: z.enum(categories),
+    type: z.enum(logbookTypes).optional(), // For logbook entries: journal or essay
     heroImage: image().optional(),
     videoUrl: z.string().url().optional(),
     gallery: z.array(image()).optional(),
