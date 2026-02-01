@@ -1,0 +1,37 @@
+/* Section-specific theme overrides */
+
+/* Logbook - Calm Waters (Cyan) */
+body.section-logbook {
+  --color-accent: var(--color-logbook-accent);
+  --color-shadow: var(--color-logbook-accent-dark);
+}
+
+body.section-logbook .header-line {
+  background: var(--color-logbook-accent);
+}
+
+body.section-logbook ::selection {
+  background: var(--color-logbook-accent);
+}
+
+body.section-logbook ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-logbook-accent);
+}
+
+/* Shipyard - Workshop Depths (Amber) */
+body.section-shipyard {
+  --color-accent: var(--color-shipyard-accent);
+  --color-shadow: var(--color-shipyard-accent-dark);
+}
+
+body.section-shipyard .header-line {
+  background: var(--color-shipyard-accent);
+}
+
+body.section-shipyard ::selection {
+  background: var(--color-shipyard-accent);
+}
+
+body.section-shipyard ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-shipyard-accent);
+}

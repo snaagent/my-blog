@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import SeaCreatures from '../components/SeaCreatures.astro';
 import '../styles/global.css';
 import '../styles/typography.css';
+import '../styles/section-themes.css';
 
 interface Props {
   title: string;
@@ -12,9 +13,10 @@ interface Props {
   image?: string;
   type?: 'website' | 'article';
   publishedTime?: Date;
+  section?: 'logbook' | 'shipyard';
 }
 
-const { title, description, image, type, publishedTime } = Astro.props;
+const { title, description, image, type, publishedTime, section } = Astro.props;
 ---
 
 <!doctype html>
@@ -28,7 +30,7 @@ const { title, description, image, type, publishedTime } = Astro.props;
       publishedTime={publishedTime}
     />
   </head>
-  <body class="dot-grid vignette">
+  <body class:list={['dot-grid', 'vignette', section && `section-${section}`]}>
     <SeaCreatures />
     <Header />
     <main>

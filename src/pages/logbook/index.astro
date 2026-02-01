@@ -1,0 +1,123 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft && data.category === 'logbook');
+
+const sortedPosts = allPosts.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout
+  title="Logbook"
+  description="Personal reflections, journals, essays, and thoughts from the depths."
+  section="logbook"
+>
+  <div class="container">
+    <header class="page-header">
+      <div class="section-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <p class="page-tagline text-mono">Personal Waters</p>
+      <h1 class="page-title">Logbook</h1>
+      <p class="page-description">
+        Journals, essays, and reflections from the depths.
+        {sortedPosts.length > 0 && <span class="post-count">{sortedPosts.length} {sortedPosts.length === 1 ? 'entry' : 'entries'}</span>}
+      </p>
+    </header>
+
+    {sortedPosts.length > 0 ? (
+      <div class="posts-grid">
+        {sortedPosts.map(post => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            category={post.data.category}
+            slug={post.id}
+            heroImage={post.data.heroImage?.src}
+            featured={post.data.featured}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state">
+        <p>No entries yet. The waters are calm...</p>
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .section-icon {
+    color: var(--color-accent);
+    margin-bottom: var(--space-md);
+    opacity: 0.8;
+  }
+
+  .page-tagline {
+    font-family: var(--font-accent);
+    font-size: 1rem;
+    font-style: italic;
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-sm);
+  }
+
+  .page-title {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 500;
+    margin-bottom: var(--space-sm);
+  }
+
+  .page-description {
+    color: var(--color-text-muted);
+    font-family: var(--font-accent);
+    font-size: 0.9375rem;
+  }
+
+  .post-count {
+    display: block;
+    margin-top: var(--space-xs);
+    font-size: 0.875rem;
+    opacity: 0.7;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-lg);
+  }
+
+  .empty-state {
+    text-align: center;
+    color: var(--color-text-muted);
+    font-family: var(--font-accent);
+    font-style: italic;
+    padding: var(--space-3xl);
+    border: 1px dashed var(--color-accent);
+    opacity: 0.6;
+  }
+
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: 2rem;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

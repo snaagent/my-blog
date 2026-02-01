@@ -15,6 +15,12 @@
   --color-beige-dark: #C4B5A5;
   --color-warm-bg: rgba(232, 222, 211, 0.05);
 
+  /* Section Colors */
+  --color-logbook-accent: #22D3EE;
+  --color-logbook-accent-dark: #0E7490;
+  --color-shipyard-accent: #F59E0B;
+  --color-shipyard-accent-dark: #B45309;
+
   /* Typography - Elegant & Readable */
   --font-heading: 'Playfair Display', Georgia, serif;
   --font-body: 'Source Serif 4', 'Georgia', serif;

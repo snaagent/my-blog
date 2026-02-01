@@ -3,7 +3,8 @@ const pathname = Astro.url.pathname;
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/blog', label: 'Blog' },
+  { href: '/logbook', label: 'Logbook' },
+  { href: '/shipyard', label: 'Shipyard' },
   { href: '/about', label: 'About' },
 ];
 
@@ -291,6 +292,10 @@ function isActive(href: string): boolean {
 
     .nav-links.open li:nth-child(3) {
       transition-delay: 0.15s;
+    }
+
+    .nav-links.open li:nth-child(4) {
+      transition-delay: 0.2s;
     }
 
     /* Menu card */
